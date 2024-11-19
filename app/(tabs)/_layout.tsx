@@ -34,7 +34,7 @@ const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
           fontSize: 11,
           color: focused ? color : 'gray', // Use the passed `color` directly
         }}>
-          {name}
+          {/* {name} */}
         </Text>
 
     </View>
@@ -46,69 +46,69 @@ const TabsLayout = () => {
     <>
     <Tabs 
       screenOptions={{
-        tabBarShowLabel: false,
-        tabBarActiveTintColor: "#FFA001",
-        tabBarInactiveTintColor: "#CDCDE0",
+        tabBarShowLabel: true,
+        tabBarActiveTintColor: "#C20E0E",
+        tabBarInactiveTintColor: "#FFFFFF",
         tabBarStyle: {
           backgroundColor: "#161622",
           borderTopWidth: 1,
-          borderTopColor: "#232533",
-          height: 84
+          borderTopColor: "#161622",
+          height: 54
         }
       }}
       >
       <Tabs.Screen
-        name="home"
+        name="search"
         options={{
-          title: "Home",
+          title: "Search",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon 
-              icon={icons.home} 
+              icon={icons.search} 
               color={color} 
-              name="Home"
+              name="Search"
               focused={focused} 
             />
         )}}
       />
       <Tabs.Screen
-        name="bookmark"
+        name="favorites"
         options={{
-          title: "Bookmark",
+          title: "Favorites",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon 
-              icon={icons.bookmark} 
+              icon={icons.heart} 
               color={color} 
-              name="Bookmark"
+              name="Favorites"
               focused={focused} 
             />
         )}}
       />
       <Tabs.Screen
-        name="create"
+        name="trips"
         options={{
-          title: "Create",
+          title: "Trips",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon 
-              icon={icons.plus} 
+              icon={icons.map} 
               color={color} 
-              name="Create"
+              name="Trips"
               focused={focused} 
             />
         )}}
       />
       <Tabs.Screen
-        name="profile"
+        name="more"
         options={{
-          title: "Profile",
+          title: "More",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon 
-              icon={icons.profile} 
+              icon={icons.more} 
               color={color} 
-              name="Profile"
+              name="More"
               focused={focused} 
             />
         )}}

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "pictora",
-    "slug": "pictora",
+    "name": "ndai-rentals",
+    "slug": "ndai-rentals",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
