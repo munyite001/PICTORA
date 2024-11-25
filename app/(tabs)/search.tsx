@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator, Image, Modal, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -7,9 +7,10 @@ const Search = () => {
   const { cars, carsLoading } = useGlobalContext();
   const [query, setQuery] = useState("");
   const [selectedCarDetails, setSelectedCarDetails] = useState(null)
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Filter cars based on search query
-  const filteredCars = cars?.filter(
+  const filteredCars = (cars || []).filter( // Ensure `cars` is always an array
     (car: { vehicleName: string; type: string; location: string }) =>
       car?.vehicleName.toLowerCase().includes(query.toLowerCase()) ||
       car?.type.toLowerCase().includes(query.toLowerCase()) ||
@@ -23,15 +24,15 @@ const Search = () => {
         <Text style={styles.tagline}>Find the perfect car</Text>
       </View>
 
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={{ color: "#FFFFFF", padding: 10 }}
-          value={query}
-          placeholder="Location, Model, Brand"
-          placeholderTextColor="#CDCDE0"
-          onChangeText={(e) => setQuery(e)}
-        />
-      </View>
+      {/* Trigger the search modal */}
+      <TouchableOpacity
+        style={styles.searchContainer}
+        onPress={() => setIsModalVisible(true)}
+      >
+        <Text style={{ color: "#CDCDE0", padding: 10 }}>
+          Location, Model, Brand
+        </Text>
+      </TouchableOpacity>
 
       {carsLoading ? (
         <ActivityIndicator size="large" color="#C20E0E" />
@@ -57,9 +58,51 @@ const Search = () => {
         />
         </>
       )}
+      {/* MODAL FOR SEARCH */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <TextInput
+              style={styles.modalInput}
+              value={query}
+              placeholder="Search by Location, Model, Brand"
+              placeholderTextColor="#CDCDE0"
+              onChangeText={(e) => setQuery(e)}
+              autoFocus={true}
+            />
+            <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+              <Text style={styles.closeButton}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            data={filteredCars}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.carCard}>
+                <Image source={{ uri: item.vehicleFrontImage }} style={styles.carImage} />
+                <View style={styles.carInfo}>
+                  <Text style={styles.carName}>{item.vehicleName}</Text>
+                  <Text style={styles.carDetails}>Location: {item.location}</Text>
+                  <Text style={styles.carDetails}>Price: ${item.price_per_day}/day</Text>
+                </View>
+              </View>
+            )}
+            ListEmptyComponent={
+              <Text style={styles.emptyText}>No cars found. Try a different search.</Text>
+            }
+          />
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -130,6 +173,32 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 16,
   },
+
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "#161622",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: "#cdcdcd",
+  },
+  modalInput: {
+    flex: 1,
+    backgroundColor: "#1E1E2A",
+    color: "#FFFFFF",
+    padding: 10,
+    borderRadius: 8,
+  },
+  closeButton: {
+    color: "#C20E0E",
+    marginLeft: 10,
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 16,
+  }
 });
 
 export default Search;
