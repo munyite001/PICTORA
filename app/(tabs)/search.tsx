@@ -6,13 +6,14 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 const Search = () => {
   const { cars, carsLoading } = useGlobalContext();
   const [query, setQuery] = useState("");
+  const [selectedCarDetails, setSelectedCarDetails] = useState(null)
 
   // Filter cars based on search query
-  const filteredCars = cars.filter(
-    (car: { make: string; type: string; location: string }) =>
-      car.make.toLowerCase().includes(query.toLowerCase()) ||
-      car.type.toLowerCase().includes(query.toLowerCase()) ||
-      car.location.toLowerCase().includes(query.toLowerCase())
+  const filteredCars = cars?.filter(
+    (car: { vehicleName: string; type: string; location: string }) =>
+      car?.vehicleName.toLowerCase().includes(query.toLowerCase()) ||
+      car?.type.toLowerCase().includes(query.toLowerCase()) ||
+      car?.location.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -35,14 +36,16 @@ const Search = () => {
       {carsLoading ? (
         <ActivityIndicator size="large" color="#C20E0E" />
       ) : (
-        <FlatList
+        <>
+        <Text style={styles.heading2}>Featured Cars</Text>
+          <FlatList
           data={filteredCars}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.carCard}>
-              <Image source={{ uri: item.image }} style={styles.carImage} />
+              <Image source={{ uri: item.vehicleFrontImage }} style={styles.carImage} />
               <View style={styles.carInfo}>
-                <Text style={styles.carName}>{item.brand} {item.model}</Text>
+                <Text style={styles.carName}>{item.vehicleName}</Text>
                 <Text style={styles.carDetails}>Location: {item.location}</Text>
                 <Text style={styles.carDetails}>Price: ${item.price_per_day}/day</Text>
               </View>
@@ -52,6 +55,7 @@ const Search = () => {
             <Text style={styles.emptyText}>No cars found. Try a different search.</Text>
           }
         />
+        </>
       )}
     </SafeAreaView>
   );
@@ -73,6 +77,13 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 23,
     fontFamily: "Poppins-Bold",
+  },
+  heading2: {
+    color: "#FFFFFF",
+    fontSize: 23,
+    fontFamily: "Poppins-Bold",
+    marginHorizontal: 20,
+    marginVertical: 10
   },
   tagline: {
     color: "#FFFFFF",

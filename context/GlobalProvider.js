@@ -15,7 +15,7 @@ const GlobalProvider = ({ children }) => {
    const fetchCars = async () => {
     try {
         setCarsLoading(true);
-        const response = await axios.get(process.env.EXPO_PUBLIC_BASE_URL + "/vehicles");
+        const response = await axios.get(process.env.EXPO_PUBLIC_BASE_URL + "/vehicles/public");
         const data = await response.data;
         setCars(data);
     } catch (error) {
